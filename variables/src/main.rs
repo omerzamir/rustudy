@@ -84,11 +84,7 @@ fn main5() {
 
     match index.cmp(&a.len()) {
         Ordering::Less => (),
-        Ordering::Equal => {
-            println!("The index is too large!");
-            return;
-        }
-        Ordering::Greater => {
+        Ordering::Equal | Ordering::Greater => {
             println!("The index is too large!");
             return;
         }
