@@ -38,6 +38,9 @@ fn main() {
     let (s2, len) = calculate_length(s1);
 
     println!("The length of '{s2}' is {len}.");
+
+    main2();
+    main3();
 }
 
 fn takes_ownership(some_string: String) {
@@ -59,4 +62,81 @@ fn calculate_length(s: String) -> (String, usize) {
     let length = s.len();
 
     (s, length)
+}
+
+fn main2() {
+    println!("main2 - references and borrowing:");
+    let s1 = String::from("hello");
+
+    let len = calculate_length2(&s1);
+
+    println!("The length of '{s1}' is {len}.");
+
+    // let s = String::from("hello"); // won't compile
+
+    let mut s = String::from("hello");
+    // change(&s); // won't compile
+    change(&mut s);
+
+    println!("{s}");
+
+    /*
+    // won't compile
+    let mut s = String::from("hello");
+
+    let r1 = &mut s;
+    let r2 = &mut s;
+
+    println!("{}, {}", r1, r2); */
+
+    /*
+    // won't compile
+    let mut s = String::from("hello");
+
+    let r1 = &s; // no problem
+    let r2 = &s; // no problem
+    let r3 = &mut s; // BIG PROBLEM
+
+    println!("{}, {}, and {}", r1, r2, r3); */
+
+    let mut s = String::from("hello");
+
+    let r1 = &s; // no problem
+    let r2 = &s; // no problem
+    println!("{r1} and {r2}");
+    // variables r1 and r2 will not be used after this point
+
+    let r3 = &mut s; // no problem
+    println!("{r3}");
+}
+
+fn calculate_length2(s: &String) -> usize {
+    s.len()
+}
+
+//won't compile
+// fn change(some_string: &String) {
+//     some_string.push_str(", world");
+// }
+
+fn change(some_string: &mut String) {
+    some_string.push_str(", world");
+}
+
+fn main3() {
+    // let reference_to_nothing = dangle();
+    let _no_dangle = no_dangle();
+}
+
+// won't compile
+// fn dangle() -> &String {
+//     let s = String::from("hello");
+
+//     &s
+// }
+
+fn no_dangle() -> String {
+    let s = String::from("hello");
+
+    s
 }
